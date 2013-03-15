@@ -1,10 +1,10 @@
 import math_utils as mu
 import math
 
-def d_sum(*args):
+def d_elt_op_keep(op, zero, args):
   """
-  Adds the dictionaries together elementwise. Missing entries are assumed to be
-  zero.
+  Applies op to arguments elementwise, keeping entries that don't occur in
+  every argument (i.e. behaves like a sum).
   """
   ret = {}
   for d in args:
@@ -12,16 +12,16 @@ def d_sum(*args):
       if key not in ret:
         ret[key] = d[key]
       else:
-        ret[key] += d[key]
+        ret[key] = op([ret[key], d[key]])
   for key in ret.keys():
-    if ret[key] == 0:
+    if ret[key] == zero:
       del ret[key]
   return ret
 
-def d_elt_prod(*args):
+def d_elt_op_drop(op, args):
   """
-  Multiplies the dictionaries together elementwise. Missing entries are assumed
-  to be zero.
+  Applies op to arguments elementwise, discarding entries that don't occur in
+  every argument (i.e. behaves like a product).
   """
   # avoid querying lots of nonexistent keys
   smallest = min(args, key=len)
@@ -33,14 +33,23 @@ def d_elt_prod(*args):
     d = args[i]
     for key in ret.keys():
       if key in d:
-        ret[key] *= d[key]
+        ret[key] = op([ret[key], d[key]])
       else:
         del ret[key]
   return ret
 
+def d_sum(args):
+  return d_elt_op_keep(sum, 0, args)
+
+def d_logspace_sum(args):
+  return d_elt_op_keep(mu.logspace_sum, -float('inf'), args)
+
+def d_elt_prod(args):
+  return d_elt_op_drop(lambda l: reduce(lambda a,b: a*b, l), args)
+
 def d_dot_prod(d1, d2):
   """
-  Takes the dot product of the two dictionaries.
+  Takes the dot product of the two arguments.
   """
   # avoid querying lots of nonexistent keys
   if len(d2) < len(d1):
@@ -50,6 +59,15 @@ def d_dot_prod(d1, d2):
     if key in d2:
       dot_prod += d1[key] * d2[key]
   return dot_prod
+
+def d_logspace_scalar_prod(c, d):
+  """
+  Multiplies every element of d by c in logspace.
+  """
+  ret = {}
+  for key in d:
+    ret[key] = c + d[key]
+  return ret
 
 def d_op(op, d):
   """
