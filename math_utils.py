@@ -1,3 +1,7 @@
+"""
+Useful math functions that don't come baked in with python.
+"""
+
 import math
 
 def logspace_sum(args):

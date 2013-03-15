@@ -2,6 +2,10 @@ import math_utils as mu
 import dict_utils as du
 
 class Semiring:
+  """
+  A semiring (for computations on hypergraphs).
+  """
+  # TODO the superclass might not be necessary
 
   def __init__(self, zero, one, sum_op, prod_op):
     self.zero = zero
@@ -10,6 +14,10 @@ class Semiring:
     self.prod_op = prod_op
 
 class DebugSemiring(Semiring):
+  """
+  A semiring for debugging purposes.
+  Computes the (unpacked) forest of all paths on the input hypergraph.
+  """
 
   def __init__(self):
     pass
@@ -27,6 +35,14 @@ class DebugSemiring(Semiring):
     return ' AND '.join(['(%s)' % val for val in values if val != ''])
 
 class LogLinearExpectationSemiring(Semiring):
+  """
+  A semiring for computing probabilities and expected feature values in
+  log-linear models.
+  Expects inputs of the form (probability, expectation), where probability is
+  the probability assigned to the input hypergraph under the model, and
+  expectation is a dictionary containing the expected value of every feature.
+  c/f (Li and Eisner 2006) [http://acl.eldoc.ub.rug.nl/mirror/D/D09/D09-1005.pdf]
+  """
 
   def __init__(self):
     pass

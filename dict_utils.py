@@ -1,3 +1,8 @@
+"""
+Utilities for doing math on sparse vectors indexed by arbitrary objects.
+(These will usually be feature vectors.)
+"""
+
 import math_utils as mu
 import math
 
@@ -39,12 +44,21 @@ def d_elt_op_drop(op, args):
   return ret
 
 def d_sum(args):
+  """
+  Computes a sum of vectors.
+  """
   return d_elt_op_keep(sum, 0, args)
 
 def d_logspace_sum(args):
+  """
+  Computes a sum of vectors whose elements are represented in logspace.
+  """
   return d_elt_op_keep(mu.logspace_sum, -float('inf'), args)
 
 def d_elt_prod(args):
+  """
+  Computes an elementwise product of vectors.
+  """
   return d_elt_op_drop(lambda l: reduce(lambda a,b: a*b, l), args)
 
 def d_dot_prod(d1, d2):
@@ -62,7 +76,8 @@ def d_dot_prod(d1, d2):
 
 def d_logspace_scalar_prod(c, d):
   """
-  Multiplies every element of d by c in logspace.
+  Multiplies every element of d by c, where c and d are both represented in
+  logspace.
   """
   ret = {}
   for key in d:

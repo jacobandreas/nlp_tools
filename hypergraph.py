@@ -3,6 +3,12 @@ import dict_utils as du
 import math
 
 class Hypergraph:
+  """
+  A directed acyclic hypergraph representing a packed forest of derivations.
+  Every Hypergraph object corresponds to one node and one rule application.
+  Outgoing edges from this node are specified by their tails (i.e. set of
+  nodes).
+  """
 
   def __init__(self, label, edges):
     self.label = label
@@ -16,16 +22,26 @@ class Hypergraph:
     return 'Hypergraph{%s}' % self.label
   
   def inside(self, feat, semiring):
+    """
+    Cleans up any earlier computation, then runs the Inside algorithm.
+    """
     self.__reset_inside_outside()
     self.__inside(feat, semiring)
 
   def inside_outside(self, feat, semiring):
+    """
+    Cleans up any earlier computation, then runs the Inside-Outside algorithm.
+    """
     self.__add_outside_edges()
     self.__reset_inside_outside()
     self.__inside(feat, semiring)
     self.__outside(feat, semiring)
 
   def __add_outside_edges(self):
+    """
+    Labels nodes with their parents and siblings (used for computing beta values
+    in the Outside algorithm).
+    """
     if self.__outside_edges != None:
       return
     for edge in self.edges:
@@ -37,6 +53,9 @@ class Hypergraph:
         hg.__outside_edges.append(outside_edge)
 
   def __reset_inside_outside(self):
+    """
+    Forgets any previously-computed alpha and beta values.
+    """
     if self.alpha == None:
       assert self.beta == None
       return
@@ -78,7 +97,8 @@ class Hypergraph:
       return
     if self.__outside_edges != None and \
        any(parent.beta == None for parent, siblings in self.__outside_edges):
-      # we're not ready to compute here yet
+      # we're not ready to compute here yet---wait for all parents to finish.
+      # TODO add comment justifying this approach vs. usual topo-sort
       return
 
     if self.__outside_edges == None:
