@@ -1,7 +1,10 @@
 #!/usr/bin/env python2
 
-import termcolor
-
+try:
+  from termcolor import cprint
+except ImportError:
+  def cprint(x, color):
+    print x
 import math_utils
 import dict_utils
 import semiring
@@ -24,7 +27,7 @@ def log_result(output, status):
   status_str = 'OK' if status else 'FAIL'
   status_color = 'green' if status else 'red'
   print '      -> %s' % str(output)
-  termcolor.cprint('      %s' % status_str, status_color)
+  cprint('      %s' % status_str, status_color)
 
 def test(test, fun, args, expected):
   log_input(args)
@@ -85,6 +88,8 @@ b = hypergraph.Hypergraph('b', ())
 c = hypergraph.Hypergraph('c', ((a,b),(b,a)))
 d = hypergraph.Hypergraph('d', ((c,a),(c,b)))
 sr = semiring.DebugSemiring()
+
+1/0
 
 log_function('inside')
 d.inside(feature.identity, sr)
