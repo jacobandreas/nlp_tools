@@ -70,7 +70,7 @@ test_eq(dict_utils.d_dot_prod,
 # semiring
 
 log_file('semiring.py')
-sr = semiring.LogLinearExpectationSemiring()
+sr = semiring.ExpectationSemiring()
 
 log_function('sum_op')
 test_eq(sr.sum_op, ([sr.zero(), sr.one()],), sr.one())
@@ -88,8 +88,6 @@ b = hypergraph.Hypergraph('b', ())
 c = hypergraph.Hypergraph('c', ((a,b),(b,a)))
 d = hypergraph.Hypergraph('d', ((c,a),(c,b)))
 sr = semiring.DebugSemiring()
-
-1/0
 
 log_function('inside')
 d.inside(feature.identity, sr)
