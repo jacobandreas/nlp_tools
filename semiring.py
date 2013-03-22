@@ -34,14 +34,14 @@ class DebugSemiring(Semiring):
   def prod_op(self, values):
     return ' AND '.join(['(%s)' % val for val in values if val != ''])
 
-class LogLinearExpectationSemiring(Semiring):
+class ExpectationSemiring(Semiring):
   """
   A semiring for computing probabilities and expected feature values in
   log-linear models.
   Expects inputs of the form (probability, expectation), where probability is
   the probability assigned to the input hypergraph under the model, and
   expectation is a dictionary containing the expected value of every feature.
-  c/f (Li and Eisner 2006) [http://acl.eldoc.ub.rug.nl/mirror/D/D09/D09-1005.pdf]
+  c/f (Li and Eisner 2006)[http://acl.eldoc.ub.rug.nl/mirror/D/D09/D09-1005.pdf]
   """
 
   def __init__(self):
