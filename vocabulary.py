@@ -30,6 +30,12 @@ class Vocabulary:
   def gets(self, tok):
     return self.tok_to_str[tok]
 
+  def strs(self):
+    return self.str_to_tok.keys()
+
+  def toks(self):
+    return self.tok_to_str.keys()
+
   def __len__(self):
     return len(self.str_to_tok)
 

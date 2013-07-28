@@ -1,6 +1,7 @@
 import math_utils as mu
 import dict_utils as du
 import math
+import itertools
 
 class Hypergraph:
   """
@@ -19,7 +20,16 @@ class Hypergraph:
     self.__outside_edges = None
 
   def __repr__(self):
-    return 'Hypergraph{%s}' % self.label
+    return 'Hypergraph{%s}' % (self.label,)
+
+  def enumerate(self):
+    if not self.edges:
+      yield (self.label,)
+    for edge in self.edges:
+      child_enumerators = [g.enumerate() for g in edge]
+      product_enumerator = itertools.product(*child_enumerators)
+      for p in product_enumerator:
+        yield (self.label, p)
   
   def inside(self, feat, semiring):
     """
