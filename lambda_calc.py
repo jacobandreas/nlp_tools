@@ -1,5 +1,5 @@
 from nlp_tools.list_utils import flatten
-from nlp_tooks.string_utils import parse_bracketed
+from nlp_tools.string_utils import parse_bracketed
 import logging
 
 class LambdaExpr:
